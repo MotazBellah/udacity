@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for, flash
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -13,7 +13,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 def get_nanodegrees():
     catalog_url = "https://catalog-api.udacity.com/v1/degrees"
@@ -35,12 +34,19 @@ def get_nanodegrees():
 def enrollment():
     catalogs = get_nanodegrees()
     if request.method == 'POST':
-        nanodegree_key = request.args.get('key')
+        nanodegree_key = str(request.args.get('key'))
         udacity_user_key = '1'
         status = 'ENROLLED'
+        print(nanodegree_key)
+        check_enroll = db.execute("SELECT * FROM enrollments WHERE status = 'ENROLLED' and nanodegree_key= :key and udacity_user_key = :user_key;",{"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
+        if check_enroll:
+            flash("You aleardy enrolled in this program!")
+            return redirect(url_for('enrollment'))
+
         db.execute("INSERT INTO enrollments (nanodegree_key, udacity_user_key, status) VALUES (:nanodegree_key, :udacity_user_key, :status)",
                     {"nanodegree_key": nanodegree_key, "udacity_user_key": udacity_user_key, "status": status})
         db.commit()
+        flash("You have enrolled successfully")
         return redirect(url_for('enrollment'))
 
     return render_template('index.html', catalogs=catalogs)
