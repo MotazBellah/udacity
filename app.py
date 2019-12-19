@@ -23,7 +23,10 @@ def get_nanodegrees():
 
     for degree in catalog_dict['degrees']:
         if degree['available'] and degree['open_for_enrollment']:
-            catalog[degree['title']] = [degree['card_image'], degree['key']]
+            img = degree['card_image']
+            if img[:4] != 'http':
+                img = 'https://d20vrrgs8k4bvw.cloudfront.net/images/degrees/nd027/nd-card.jpg'
+            catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
 
     return catalog
 

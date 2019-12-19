@@ -15,19 +15,21 @@ def test():
     g = []
     z = {}
     for i in y['degrees']:
-        print(i['title'])
+        # print(i['title'])
+        # print(i['short_summary'])
+    #     short_summary
         print(i['key'])
-        z[i['title']] = [i['card_image'], i['key']]
-        # print(i['image'])
-        print(i['card_image'])
-        if i['available'] and i['open_for_enrollment']:
-            g.append(i['title'])
-
-    print('================')
-    print(g)
-    print(z)
-
-    # print(y['degrees'][0]['title'])
+        # z[i['title']] = [i['card_image'], i['key']]
+        print(i['image'])
+    #     print(i['card_image'])
+    #     if i['available'] and i['open_for_enrollment']:
+    #         g.append(i['title'])
+    #
+    # print('================')
+    # print(g)
+    # print(z)
+    #
+    # # print(y['degrees'][0]['title'])
 
 
 
