@@ -40,13 +40,13 @@ def enrollment():
         print(nanodegree_key)
         check_enroll = db.execute("SELECT * FROM enrollments WHERE status = 'ENROLLED' and nanodegree_key= :key and udacity_user_key = :user_key;",{"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
         if check_enroll:
-            flash("You aleardy enrolled in this program!")
+            flash("You aleardy enrolled in this program!", 'error')
             return redirect(url_for('enrollment'))
 
         db.execute("INSERT INTO enrollments (nanodegree_key, udacity_user_key, status) VALUES (:nanodegree_key, :udacity_user_key, :status)",
                     {"nanodegree_key": nanodegree_key, "udacity_user_key": udacity_user_key, "status": status})
         db.commit()
-        flash("You have enrolled successfully")
+        flash("You have enrolled successfully", 'success')
         return redirect(url_for('enrollment'))
 
     return render_template('index.html', catalogs=catalogs)
