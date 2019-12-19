@@ -3,56 +3,17 @@
 
 {% block head %}
      {{ super() }}
-    <style media="screen">
-        img {
-            width: 200px;
-            height: 193px;
-            float: left;
-        }
-
-        .card-content {
-            width: 80%;
-            float: right;
-        }
-
-        .button {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-        ul li {
-            color: red;
-        }
-        #register{
-            /* margin: auto; */
-            width: 50%;
-        }
-        .error {
-          background-color: red;
-          color: black
-        }
-        .success {
-          background-color: green;
-          color: black
-        }
-        @media only screen and (max-width: 600px) {
-          #register {
-            width: 100%;
-          }
-        }
-    </style>
 {% endblock %}
 {% block content %}
-
 
 
         {% for catalog in catalogs %}
 
         <div class="card mt-3">
-            <div class="card-body">
+            <div class="card-body clearfix">
                 <img src="{{ catalogs[catalog][0] }}" alt="">
                 <div class="card-content">
-                    <h3>{{ catalog }}</h3>
+                    <h4>{{ catalog }}</h4>
                     <span>{{ catalogs[catalog][2] }}</span>
                     <form  action="{{url_for('enrollment', key=catalogs[catalog][1])}}" method="post">
                             <input class="btn btn-primary button m-2" type="submit" value="Enroll">
