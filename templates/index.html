@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+
+        {% for catalog in catalogs %}
+
+            <p>{{ catalog }}</p>
+            <img src="{{ catalogs[catalog][0] }}" alt="">
+            <form  action="{{url_for('enrollment', key=catalogs[catalog][1])}}" method="post">
+                    <input type="submit" value="Eroll">
+            </form>
+            <hr>
+
+        {% endfor %}
+
+
+    </body>
+</html>
