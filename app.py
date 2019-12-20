@@ -1,17 +1,10 @@
-from flask import Flask, session, render_template, request, redirect, url_for, flash
-from flask_session import Session
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from flask import Flask, render_template, request, redirect, url_for, flash
 from database_setup import db
 import httplib2
 import json
 
 app = Flask(__name__)
-
-# Configure session to use filesystem
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.secret_key = 'super_secret_key'
 
 # create function to connect to api and fetch the data
 def get_nanodegrees():
@@ -19,15 +12,18 @@ def get_nanodegrees():
     h = httplib2.Http()
     catalog_dict = json.loads(h.request(catalog_url, 'GET')[1])
     catalog = {}
+    key = set()
     try:
         for degree in catalog_dict['degrees']:
             if degree['available'] and degree['open_for_enrollment']:
                 img = degree['card_image']
                 if img[:4] != 'http':
                     img = 'https://d20vrrgs8k4bvw.cloudfront.net/images/degrees/nd027/nd-card.jpg'
-                catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
+                if degree['key'][:5] not in key:
+                    catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
+                    key.add(degree['key'][:5])
     except Exception as e:
-        pass
+        return {}
 
     return catalog
 
@@ -37,7 +33,7 @@ def enrollment():
     catalogs = get_nanodegrees()
     if request.method == 'POST':
         nanodegree_key = str(request.args.get('key'))
-        udacity_user_key = '1'
+        udacity_user_key = '14'
         status = 'ENROLLED'
         # print(nanodegree_key)
         check_enroll = db.execute('''SELECT * FROM enrollments WHERE status = 'ENROLLED'
@@ -55,9 +51,8 @@ def enrollment():
         return redirect(url_for('enrollment'))
 
     return render_template('index.html', catalogs=catalogs)
-    # return render_template('index2.html', catalogs=catalogs)
+
 
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
     app.run(debug=True, host='0.0.0.0')
