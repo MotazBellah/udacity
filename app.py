@@ -12,8 +12,6 @@ def get_nanodegrees():
     h = httplib2.Http()
     catalog_dict = json.loads(h.request(catalog_url, 'GET')[1])
     catalog = {}
-    # create a unique key to check if you have a unique programs
-    key = set()
     # add try/except blook to avoid crush the app in case of key error
     try:
         for degree in catalog_dict['degrees']:
@@ -21,9 +19,9 @@ def get_nanodegrees():
                 img = degree['card_image']
                 if img[:4] != 'http':
                     img = 'https://d20vrrgs8k4bvw.cloudfront.net/images/degrees/nd027/nd-card.jpg'
-                if degree['key'][:5] not in key:
-                    catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
-                    key.add(degree['key'][:5])
+
+                catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
+
     except Exception as e:
         return {}
 
