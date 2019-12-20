@@ -1,4 +1,4 @@
-# Currency Converter
+# Udacity Enrollment
 
 Web application contains a list of Udacity Nanodegree and allow the user to choose any program wants to enroll into
 
@@ -22,7 +22,7 @@ Web application contains a list of Udacity Nanodegree and allow the user to choo
 
 6. Click on “Settings”, and then “View Credentials.”. This information to hock my App to the DB
 
-7. use the Credentials to connect the application with the DB
+7. Use the Credentials to connect the application with the DB
 
 ## Create table on DB
 
@@ -37,15 +37,3 @@ Web application contains a list of Udacity Nanodegree and allow the user to choo
 - In order to get the command run `docker ps -a`, which is `python app.py`
 
 - To run the application run `python app.py`
-
-### Create DB
-
-- run `python create.py`
-
-- run `python app.py`
-
-- go to localhost:7000
-
-### Run the tests
-
-- run `python convert_test.py`
