@@ -28,6 +28,21 @@ class BasicsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+    def test_enroll_dublicate(self):
+        """Test the post response of enrollment"""
+        response = self.client.post(
+            '/enrollment?key=nd018', follow_redirects=True)
+        # print(response.data)
+        self.assertIn(b"You aleardy enrolled in this program!", response.data)
+
+
+    def test_enroll(self):
+        """Test the post response of enrollment"""
+        response = self.client.post(
+            '/enrollment?key=ndd18', follow_redirects=True)
+        # print(response.data)
+        self.assertIn(b"You have enrolled successfully", response.data)
+
 
 if __name__ == '__main__':
     unittest.main()

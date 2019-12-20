@@ -36,9 +36,14 @@ def enrollment():
     if request.method == 'POST':
         nanodegree_key = str(request.args.get('key'))
         udacity_user_key = '1'
+        # nanodegree_key = "nd0055"
+        # udacity_user_key = 'test100'
         status = 'ENROLLED'
+        # print(nanodegree_key)
+        check_enroll = db.execute('''SELECT * FROM enrollments WHERE status = 'ENROLLED'
+                                  and nanodegree_key= :key and udacity_user_key = :user_key LIMIT 1;''',
+                                  {"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
         print(nanodegree_key)
-        check_enroll = db.execute("SELECT * FROM enrollments WHERE status = 'ENROLLED' and nanodegree_key= :key and udacity_user_key = :user_key;",{"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
         if check_enroll:
             flash("You aleardy enrolled in this program!", 'error')
             return redirect(url_for('enrollment'))
