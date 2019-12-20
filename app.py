@@ -13,19 +13,21 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-
+# create function to connect to api and fetch the data
 def get_nanodegrees():
     catalog_url = "https://catalog-api.udacity.com/v1/degrees"
     h = httplib2.Http()
     catalog_dict = json.loads(h.request(catalog_url, 'GET')[1])
     catalog = {}
-
-    for degree in catalog_dict['degrees']:
-        if degree['available'] and degree['open_for_enrollment']:
-            img = degree['card_image']
-            if img[:4] != 'http':
-                img = 'https://d20vrrgs8k4bvw.cloudfront.net/images/degrees/nd027/nd-card.jpg'
-            catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
+    try:
+        for degree in catalog_dict['degrees']:
+            if degree['available'] and degree['open_for_enrollment']:
+                img = degree['card_image']
+                if img[:4] != 'http':
+                    img = 'https://d20vrrgs8k4bvw.cloudfront.net/images/degrees/nd027/nd-card.jpg'
+                catalog[degree['title']] = [img, degree['key'], degree['short_summary']]
+    except Exception as e:
+        pass
 
     return catalog
 
@@ -36,14 +38,12 @@ def enrollment():
     if request.method == 'POST':
         nanodegree_key = str(request.args.get('key'))
         udacity_user_key = '1'
-        # nanodegree_key = "nd0055"
-        # udacity_user_key = 'test100'
         status = 'ENROLLED'
         # print(nanodegree_key)
         check_enroll = db.execute('''SELECT * FROM enrollments WHERE status = 'ENROLLED'
                                   and nanodegree_key= :key and udacity_user_key = :user_key LIMIT 1;''',
                                   {"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
-        print(nanodegree_key)
+
         if check_enroll:
             flash("You aleardy enrolled in this program!", 'error')
             return redirect(url_for('enrollment'))
