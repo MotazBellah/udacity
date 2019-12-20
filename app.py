@@ -12,7 +12,9 @@ def get_nanodegrees():
     h = httplib2.Http()
     catalog_dict = json.loads(h.request(catalog_url, 'GET')[1])
     catalog = {}
+    # create a unique key to check if you have a unique programs
     key = set()
+    # add try/except blook to avoid crush the app in case of key error
     try:
         for degree in catalog_dict['degrees']:
             if degree['available'] and degree['open_for_enrollment']:
@@ -30,12 +32,15 @@ def get_nanodegrees():
 
 @app.route("/enrollment", methods=['GET', 'POST'])
 def enrollment():
+    # get the programs
     catalogs = get_nanodegrees()
+    # If the user click enroll, get the key from the url
+    # check if the user not enrolled already in the program, and notify him if so
+    # otherwise, update the db and inform the user
     if request.method == 'POST':
         nanodegree_key = str(request.args.get('key'))
         udacity_user_key = '14'
         status = 'ENROLLED'
-        # print(nanodegree_key)
         check_enroll = db.execute('''SELECT * FROM enrollments WHERE status = 'ENROLLED'
                                   and nanodegree_key= :key and udacity_user_key = :user_key LIMIT 1;''',
                                   {"key": nanodegree_key, "user_key": udacity_user_key}).fetchall()
@@ -51,7 +56,6 @@ def enrollment():
         return redirect(url_for('enrollment'))
 
     return render_template('index.html', catalogs=catalogs)
-
 
 
 if __name__ == '__main__':

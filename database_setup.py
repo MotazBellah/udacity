@@ -2,10 +2,12 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+# connected to heroku postgresql DB
 DATABASE_URL = 'postgres://ljshxrpvevmggg:8e6f92050f9a64748fb1bbb782989b87131c7187d5d7cd7786e70bd1756c9569@ec2-54-83-13-145.compute-1.amazonaws.com:5432/dcomqm3auo5p1d'
 engine = create_engine(DATABASE_URL)
 db = scoped_session(sessionmaker(bind=engine))
 
+# Create a table and create a text SEQUENCE
 def main():
     commands = (
         """
