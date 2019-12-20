@@ -7,7 +7,8 @@
 {% block content %}
 
     {{ super() }}
-
+    
+    {% if catalogs %}
         {% for catalog in catalogs %}
 
         <div class="card mt-3">
@@ -24,6 +25,18 @@
         </div>
         {% endfor %}
 
+    {% else %}
+
+        <div class="card mt-3">
+            <div class="card-body clearfix">
+                <img src="{{ catalogs[catalog][0] }}" alt="">
+                <div class="card-content">
+                    <h4>There are no programs available</h4>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
 
     {% block script %}
         {{ super() }}
