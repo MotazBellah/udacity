@@ -39,7 +39,7 @@ def enrollment():
     # otherwise, update the db and inform the user
     if request.method == 'POST':
         nanodegree_key = str(request.args.get('key'))
-        udacity_user_key = '14'
+        udacity_user_key = '1'
         status = 'ENROLLED'
         check_enroll = db.execute('''SELECT * FROM enrollments WHERE status = 'ENROLLED'
                                   and nanodegree_key= :key and udacity_user_key = :user_key LIMIT 1;''',

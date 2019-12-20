@@ -39,7 +39,7 @@ class BasicsTestCase(unittest.TestCase):
     def test_enroll(self):
         """Test the post response of enrollment"""
         response = self.client.post(
-            '/enrollment?key=ndd18', follow_redirects=True)
+            '/enrollment?key=nd18', follow_redirects=True)
         # print(response.data)
         self.assertIn(b"You have enrolled successfully", response.data)
 
